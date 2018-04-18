@@ -1,8 +1,13 @@
 # Mouse Joust
 > A competitive reflex game
 
+- [Overview](#overview)
 - [Rules](#rules)
 - [How to run](#how-to-run)
+
+## Overview
+
+I might touch this up and add payments to turn it into a sort of betting game.
 
 ## Rules
 
@@ -13,7 +18,7 @@ opponent there, the opponent is vanquished.
 
 ## How to run
 
-```js
+```sh
 git clone https://github.com/sharafian/mouse-joust.git
 cd moust-joust
 npm install
