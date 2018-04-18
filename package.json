@@ -1,0 +1,25 @@
+{
+  "name": "mouse-joust",
+  "version": "0.0.1",
+  "description": "Competitive reflex game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sharafian/mouse-joust.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sharafian/mouse-joust/issues"
+  },
+  "homepage": "https://github.com/sharafian/mouse-joust#readme",
+  "dependencies": {
+    "fs-extra": "^5.0.0",
+    "koa": "^2.5.0",
+    "koa-router": "^7.4.0",
+    "ws": "^5.1.1"
+  }
+}

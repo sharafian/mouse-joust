@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+let playerId = String(Math.random()).substring(2)
+let url = new URL(window.location)
+let gameId = window.hash || '0'
+let socket
+let players = {}
+
+function draw () {
+  const c = document.getElementById('canvas')
+  const ctx = c.getContext('2d')
+
+  ctx.fillStyle = 'white'
+  ctx.fillRect(0, 0, c.width, c.height)
+
+  for (const player of Object.keys(players)) {
+    ctx.beginPath()
+    ctx.fillStyle = player === playerId ? 'red' : 'black'
+    ctx.arc(players[player].x, players[player].y, 30, 0, 2 * Math.PI)
+    ctx.fill()
+    ctx.closePath()
+  }
+}
+
+window.addEventListener('load', function () {
+  socket = new WebSocket('ws://' + url.host)
+
+  socket.onopen = function () {
+    socket.send(JSON.stringify({
+      type: 'join',
+      game_id: gameId,
+      player_id: playerId
+    }))
+  }
+
+  socket.onmessage = function (e) {
+    const msg = JSON.parse(e.data)
+    if (msg.type === 'start') {
+      for (const player of Object.keys(msg.positions)) {
+        players[player] = msg.positions[player]
+      }
+      draw()
+    } else if (msg.type === 'move') {
+      players[msg.player_id] = {
+        x: msg.x,
+        y: msg.y
+      }
+      draw()
+    } else if (msg.type === 'winner') {
+      const win = document.getElementById('win_message')
+      if (msg.player_id === playerId) {
+        win.innerHTML = 'You won!'
+      } else {
+        win.innerHTML = 'An opponent won :('
+      }
+    }
+  }
+})
+
+function onStart (e) {
+  e.preventDefault()  
+  socket.send(JSON.stringify({
+    type: 'start'
+  }))
+}
+
+function moveCursor (e) {
+  e.preventDefault()
+  socket.send(JSON.stringify({
+    type: 'move',
+    x: e.offsetX,
+    y: e.offsetY
+  }))
+}
+
+    </script>
+  </head>
+  <body style="background-color:#888">
+
+<canvas
+  id="canvas"
+  width="400"
+  height="400"
+  onclick="moveCursor(event)"
+  style="background-color:#fff;">
+</canvas>
+
+<p id="win_message"></p>
+<button onclick="onStart(event)">Start</button>
+
+  </body>
+</html>
